@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 export default function Login() {
@@ -31,8 +31,7 @@ export default function Login() {
 			.then((res) => res.json())
 			.then((data) => {
 				localStorage.setItem("token", data.token);
-				window.location.reload(false);
-				navigate("/");
+				navigate(0);
 			});
 		setForm({ email: "", username: "", password: "" });
 	}

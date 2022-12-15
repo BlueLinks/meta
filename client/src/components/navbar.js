@@ -12,13 +12,6 @@ export default function Navbar() {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState(null);
 
-	async function logout() {
-		console.log("Logging user out");
-		localStorage.removeItem("token");
-		setUsername(null);
-		navigate("/login");
-	}
-
 	useEffect(() => {
 		fetch("http://localhost:5000/isUserAuth", {
 			headers: {
@@ -73,7 +66,7 @@ export default function Navbar() {
 									<li>
 										<NavLink
 											className="nav-link"
-											onClick={logout}
+											to="/logout"
 										>
 											Logout
 										</NavLink>

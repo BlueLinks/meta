@@ -98,6 +98,10 @@ authRoutes.get("/isUserAuth", verifyJWT, (req, res) => {
 	res.json({ isLoggedIn: true, username: req.user.username });
 });
 
+authRoutes.get("/logout", (req, res) => {
+	res.json({ isLoggedIn: true, username: req.user.username });
+});
+
 function verifyJWT(req, res, next) {
 	console.log("Verifying JTW");
 	const token = req.headers["x-access-token"]?.split(" ")[1];
