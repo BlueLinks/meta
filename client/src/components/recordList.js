@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import * as Icon from "react-bootstrap-icons";
 
 const Record = (props) => (
-	<tr>
-		<td>{props.record.meta}</td>
-		<td>{props.record.submitter}</td>
-		<td>
-			<Link className="btn btn-link" to={`/edit/${props.record._id}`}>
-				Edit
+	<li>
+		{props.record.meta}
+		<br />
+		<span
+			style={{ color: "LightSlateGray", display: "inline" }}
+			class="d-inline-block"
+		>
+			<Icon.Dash />
+			{props.record.submitter}
+			<Link className="mx-1" to={`/edit/${props.record._id}`}>
+				<Icon.PencilSquare />
 			</Link>{" "}
 			|
-			<button
-				className="btn btn-link"
+			<Link
+				className="mx-1"
 				onClick={() => {
 					props.deleteRecord(props.record._id);
 				}}
 			>
-				Delete
-			</button>
-		</td>
-	</tr>
+				<Icon.Trash />
+			</Link>
+		</span>
+	</li>
 );
 
 export default function RecordList() {
@@ -38,7 +44,7 @@ export default function RecordList() {
 
 			const records = await response.json();
 			setRecords(records);
-			document.getElementById("metaTable").style.display = "block";
+			document.getElementById("metaList").style.display = "block";
 			document.getElementById("tableLoading").style.display = "none";
 		}
 
@@ -72,32 +78,35 @@ export default function RecordList() {
 
 	// This following section will display the table with the records of individuals.
 	return (
-		<div className="container-lg">
-			<div className="text-center">
-				<div
-					id="tableLoading"
-					className="spinner-border m-5"
-					role="status"
-				></div>
-			</div>
-			<table
-				id="metaTable"
-				className="table table-striped table-dark"
-				style={{ marginTop: 20 }}
-			>
-				<thead>
-					<tr>
-						<th className="col-sm-3">Meta</th>
-						<th className="col-sm-1">Submitter</th>
-						<th className="col-sm-1">Action</th>
-					</tr>
-				</thead>
-				<tbody>{recordList()}</tbody>
-			</table>
-			<div className="col text-center">
-				<Link className="btn btn-primary btn-lg col-6" to={`/create`}>
-					Add to Meta
-				</Link>
+		<div className="container mt-3">
+			<div class="mt-4 p-3 bg-dark text-white rounded">
+				<div class="container">
+					<h1 style={{ "font-family": "Cursive" }}>The Meta</h1>
+					<hr></hr>
+					<div className="text-center">
+						<div
+							id="tableLoading"
+							className="spinner-border m-5"
+							role="status"
+						></div>
+					</div>
+					<ul id="metaList">
+						{recordList()}
+						<div>
+							<Link
+								className="btn btn-primary mt-3"
+								to={`/create`}
+							>
+								<span
+									style={{ display: "inline" }}
+									class="d-inline-block"
+								>
+									New Meta +
+								</span>
+							</Link>
+						</div>
+					</ul>
+				</div>
 			</div>
 		</div>
 	);
