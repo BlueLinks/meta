@@ -18,7 +18,7 @@ import LoginError from "./components/loginerror";
 const App = () => {
 	return (
 		<div>
-			<Navbar />
+			<Navbar expand="lg" />
 			<Routes>
 				<Route exact path="/" element={<RecordList />} />
 				<Route path="/edit/:id" element={<Edit />} />

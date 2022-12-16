@@ -8,7 +8,7 @@ const Record = (props) => (
 		<br />
 		<span
 			style={{ color: "LightSlateGray", display: "inline" }}
-			class="d-inline-block"
+			className="d-inline-block"
 		>
 			<Icon.Dash />
 			{props.record.submitter}
@@ -79,9 +79,9 @@ export default function RecordList() {
 	// This following section will display the table with the records of individuals.
 	return (
 		<div className="container mt-3">
-			<div class="mt-4 p-3 bg-dark text-white rounded">
-				<div class="container">
-					<h1 style={{ "font-family": "Cursive" }}>The Meta</h1>
+			<div className="mt-4 p-3 bg-dark text-white rounded">
+				<div className="container">
+					<h1 style={{ fontFamily: "Cursive" }}>The Meta</h1>
 					<hr></hr>
 					<div className="text-center">
 						<div
@@ -99,7 +99,7 @@ export default function RecordList() {
 							>
 								<span
 									style={{ display: "inline" }}
-									class="d-inline-block"
+									className="d-inline-block"
 								>
 									New Meta +
 								</span>

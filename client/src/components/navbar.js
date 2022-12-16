@@ -9,6 +9,10 @@ import { NavLink } from "react-router-dom";
 
 // Here, we display our Navbar
 export default function Navbar() {
+	const [isNavCollapsed, setIsNavCollapsed] = useState(true);
+
+	const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
+
 	const navigate = useNavigate();
 	const [username, setUsername] = useState(null);
 
@@ -25,28 +29,30 @@ export default function Navbar() {
 	}, []);
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div className="container">
 				<a className="navbar-brand" href="/">
 					Meta
 				</a>
 				<button
-					className="navbar-toggler"
+					class="custom-toggler navbar-toggler"
 					type="button"
 					data-toggle="collapse"
-					data-target="#navbarSupportedContent"
-					aria-controls="navbarSupportedContent"
-					aria-expanded="false"
+					data-target="#collapsableItems"
+					aria-controls="collapsableItems"
+					aria-expanded={!isNavCollapsed ? true : false}
 					aria-label="Toggle navigation"
+					onClick={handleNavCollapse}
 				>
-					<span className="navbar-toggler-icon"></span>
+					<span class="navbar-toggler-icon"></span>
 				</button>
-
 				<div
-					className="collapse navbar-collapse"
-					id="navbarSupportedContent"
+					class={`${
+						isNavCollapsed ? "collapse" : ""
+					} navbar-collapse`}
+					id="collapsableItems"
 				>
-					<ul className="navbar-nav ml-auto">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li className="nav-item">
 							<NavLink className="nav-link" to="/">
 								Home
@@ -85,11 +91,6 @@ export default function Navbar() {
 								</li>
 							</>
 						)}
-						{/* <li className="nav-item">
-								<NavLink className="nav-link" to="/create">
-									Add to the Meta
-								</NavLink>
-							</li> */}
 					</ul>
 				</div>
 			</div>
