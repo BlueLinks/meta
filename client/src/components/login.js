@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 export default function Login() {
 	const [form, setForm] = useState({
 		email: "",
-		username: "",
 		password: "",
 	});
 	const navigate = useNavigate();
@@ -16,10 +15,21 @@ export default function Login() {
 		});
 	}
 
+	const validateEmail = (email) => {
+		return String(email)
+			.toLowerCase()
+			.match(
+				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+			);
+	};
+
 	async function handleLogin(e) {
 		e.preventDefault();
-		console.log("handling Login");
 		const user = { ...form };
+		if (!validateEmail(user.email)) {
+			user.username = user.email;
+		}
+
 		// Make request to login route
 		fetch("http://localhost:5000/login", {
 			method: "POST",
@@ -28,12 +38,17 @@ export default function Login() {
 			},
 			body: JSON.stringify(user),
 		})
-			.then((res) => res.json())
+			.then((res) => {
+				if (!res.ok) {
+					navigate("/login_error");
+				}
+				return res.json();
+			})
 			.then((data) => {
 				localStorage.setItem("token", data.token);
 				navigate(0);
 			});
-		setForm({ email: "", username: "", password: "" });
+		setForm({ email: "", password: "" });
 	}
 
 	useEffect(() => {
@@ -51,53 +66,61 @@ export default function Login() {
 	}, []);
 
 	return (
-		<div className="container-lg">
-			<br />
-			<h3>Login</h3>
-			<form onSubmit={(event) => handleLogin(event)}>
-				<div className="form-group">
-					<label htmlFor="Email">Email</label>
-					<input
-						type="email"
-						className="form-control"
-						id="email"
-						value={form.email}
-						onChange={(e) => updateForm({ email: e.target.value })}
-					/>
+		<div className="container-sm mt-3">
+			<div className="mt-4 p-3 bg-dark text-white rounded">
+				<div className="container">
+					<h1>Login</h1>
+					<hr></hr>
+					<form onSubmit={(event) => handleLogin(event)}>
+						<div className="row mb-3">
+							<label
+								className="col-sm-2 col-form-label"
+								htmlFor="Email"
+							>
+								Email / Username
+							</label>
+							<div className="col-sm">
+								<input
+									type="string"
+									className="form-control"
+									id="email"
+									value={form.email}
+									onChange={(e) =>
+										updateForm({ email: e.target.value })
+									}
+								/>
+							</div>
+						</div>
+						<div className="row mb-3">
+							<label
+								className="col-sm-2 col-form-label"
+								htmlFor="Password"
+							>
+								Password
+							</label>
+							<div className="col-sm">
+								<input
+									type="password"
+									className="form-control"
+									id="password"
+									value={form.password}
+									onChange={(e) =>
+										updateForm({ password: e.target.value })
+									}
+								/>
+							</div>
+						</div>
+						<br />
+						<div className="row mb-3">
+							<input
+								type="submit"
+								value="Login"
+								className="btn btn-primary"
+							/>
+						</div>
+					</form>
 				</div>
-				<div className="form-group">
-					<label htmlFor="Username">Username</label>
-					<input
-						type="text"
-						className="form-control"
-						id="username"
-						value={form.username}
-						onChange={(e) =>
-							updateForm({ username: e.target.value })
-						}
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="Password">Password</label>
-					<input
-						type="password"
-						className="form-control"
-						id="password"
-						value={form.password}
-						onChange={(e) =>
-							updateForm({ password: e.target.value })
-						}
-					/>
-				</div>
-				<br />
-				<div className="form-group">
-					<input
-						type="submit"
-						value="Login"
-						className="btn btn-primary"
-					/>
-				</div>
-			</form>
+			</div>
 		</div>
 	);
 }

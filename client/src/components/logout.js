@@ -7,7 +7,6 @@ export default function Logout() {
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		if (token) {
-			console.log("Logging user out");
 			localStorage.removeItem("token");
 			setUsername(null);
 			window.location.reload(false);

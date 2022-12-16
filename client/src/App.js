@@ -12,6 +12,8 @@ import Register from "./components/register";
 import Login from "./components/login";
 import ProfilePage from "./components/profile";
 import Logout from "./components/logout";
+import RegisterError from "./components/registerError";
+import LoginError from "./components/loginerror";
 
 const App = () => {
 	return (
@@ -25,6 +27,12 @@ const App = () => {
 				<Route exact path="/login" element={<Login />} />
 				<Route exact path="/u/:userId" element={<ProfilePage />} />
 				<Route exact path="/logout" element={<Logout />} />
+				<Route
+					exact
+					path="/register_error"
+					element={<RegisterError />}
+				/>
+				<Route exact path="/login_error" element={<LoginError />} />
 			</Routes>
 		</div>
 	);
