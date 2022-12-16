@@ -8,6 +8,24 @@ export default function Edit() {
 	});
 	const params = useParams();
 	const navigate = useNavigate();
+	const [username, setUsername] = useState(null);
+	const [owner, setOwner] = useState(null);
+
+	function checkCorrectUser(owner) {
+		// Check user is logged in
+		fetch("http://localhost:5000/isUserAuth", {
+			headers: {
+				"x-access-token": localStorage.getItem("token"),
+			},
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				// If user is not logged in then naviagate away
+				data.isLoggedIn && data.username == owner
+					? setUsername(data.username)
+					: navigate("/");
+			});
+	}
 
 	useEffect(() => {
 		async function fetchData() {
@@ -28,14 +46,17 @@ export default function Edit() {
 				navigate("/");
 				return;
 			}
-
 			setForm(record);
+			setOwner(record.submitter);
+			checkCorrectUser(record.submitter);
 		}
 
 		fetchData();
 
 		return;
 	}, [params.id, navigate]);
+
+	useEffect(() => {}, []);
 
 	// These methods will update the state properties.
 	function updateForm(value) {
@@ -46,21 +67,22 @@ export default function Edit() {
 
 	async function onSubmit(e) {
 		e.preventDefault();
-		const editedMeta = {
-			meta: form.meta,
-			submitter: form.submitter,
-		};
+		if ((owner = username)) {
+			const editedMeta = {
+				meta: form.meta,
+				submitter: username,
+			};
 
-		// This will send a post request to update the data in the database.
-		await fetch(`http://localhost:5000/update/${params.id}`, {
-			method: "POST",
-			body: JSON.stringify(editedMeta),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-
-		navigate("/");
+			// This will send a post request to update the data in the database.
+			await fetch(`http://localhost:5000/update/${params.id}`, {
+				method: "POST",
+				body: JSON.stringify(editedMeta),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			navigate("/");
+		}
 	}
 
 	// This following section will display the form that takes input from the user to update the data.
@@ -77,18 +99,6 @@ export default function Edit() {
 						id="meta"
 						value={form.meta}
 						onChange={(e) => updateForm({ meta: e.target.value })}
-					/>
-				</div>
-				<div className="form-group">
-					<label htmlFor="submitter">Submitter: </label>
-					<input
-						type="text"
-						className="form-control"
-						id="submitter"
-						value={form.submitter}
-						onChange={(e) =>
-							updateForm({ submitter: e.target.value })
-						}
 					/>
 				</div>
 				<br />

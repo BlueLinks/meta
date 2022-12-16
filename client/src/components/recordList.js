@@ -2,34 +2,43 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as Icon from "react-bootstrap-icons";
 
-const Record = (props) => (
-	<li>
-		{props.record.meta}
-		<br />
-		<span
-			style={{ color: "LightSlateGray", display: "inline" }}
-			className="d-inline-block"
-		>
-			<Icon.Dash />
-			{props.record.submitter}
-			<Link className="mx-1" to={`/edit/${props.record._id}`}>
-				<Icon.PencilSquare />
-			</Link>{" "}
-			|
-			<Link
-				className="mx-1"
-				onClick={() => {
-					props.deleteRecord(props.record._id);
-				}}
-			>
-				<Icon.Trash />
-			</Link>
-		</span>
-	</li>
-);
-
 export default function RecordList() {
+	const [username, setUsername] = useState(null);
 	const [records, setRecords] = useState([]);
+
+	const Record = (props) => (
+		<li>
+			{props.record.meta}
+			<br />
+			<span
+				style={{ color: "LightSlateGray", display: "inline" }}
+				className="d-inline-block"
+			>
+				<Icon.Dash />
+				{props.record.submitter}
+				{props.record.submitter == username ? (
+					<span>
+						(
+						<Link className="mx-1" to={`/edit/${props.record._id}`}>
+							<Icon.PencilSquare />
+						</Link>
+						|
+						<Link
+							className="mx-1"
+							onClick={() => {
+								props.deleteRecord(props.record._id);
+							}}
+						>
+							<Icon.Trash />
+						</Link>
+						){" "}
+					</span>
+				) : (
+					<></>
+				)}
+			</span>
+		</li>
+	);
 
 	// This method fetches the records from the database.
 	useEffect(() => {
@@ -52,6 +61,18 @@ export default function RecordList() {
 
 		return;
 	}, [records.length]);
+
+	useEffect(() => {
+		fetch("http://localhost:5000/isUserAuth", {
+			headers: {
+				"x-access-token": localStorage.getItem("token"),
+			},
+		})
+			.then((res) => res.json())
+			.then((data) =>
+				data.isLoggedIn ? setUsername(data.username) : null
+			);
+	}, []);
 
 	// This method will delete a record
 	async function deleteRecord(id) {
@@ -92,19 +113,23 @@ export default function RecordList() {
 					</div>
 					<ul id="metaList">
 						{recordList()}
-						<div>
-							<Link
-								className="btn btn-primary mt-3"
-								to={`/create`}
-							>
-								<span
-									style={{ display: "inline" }}
-									className="d-inline-block"
+						{username ? (
+							<div>
+								<Link
+									className="btn btn-primary mt-3"
+									to={`/create`}
 								>
-									New Meta +
-								</span>
-							</Link>
-						</div>
+									<span
+										style={{ display: "inline" }}
+										className="d-inline-block"
+									>
+										New Meta +
+									</span>
+								</Link>
+							</div>
+						) : (
+							<></>
+						)}
 					</ul>
 				</div>
 			</div>
