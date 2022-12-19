@@ -104,18 +104,6 @@ authRoutes.get("/isUserAuth", verifyJWT, (req, res) => {
 	res.json({ isLoggedIn: true, username: req.user.username });
 });
 
-authRoutes.get("/logout", (req, res) => {
-	res.json({ isLoggedIn: true, username: req.user.username });
-});
-
-authRoutes.get("/register_error", (req, res) => {
-	res.json({ isLoggedIn: true, username: req.user.username });
-});
-
-authRoutes.get("/login_error", (req, res) => {
-	res.json({ isLoggedIn: true, username: req.user.username });
-});
-
 function verifyJWT(req, res, next) {
 	const token = req.headers["x-access-token"]?.split(" ")[1];
 
