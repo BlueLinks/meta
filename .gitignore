@@ -146,6 +146,8 @@ psd
 thumb
 sketch
 
+fly.toml
+
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
